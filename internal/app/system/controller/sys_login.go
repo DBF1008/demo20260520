@@ -1,10 +1,3 @@
-/*
-* @desc:登录
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu
-* @Date:   2022/4/27 21:52
- */
-
 package controller
 
 import (
@@ -37,7 +30,7 @@ func (c *loginController) Login(ctx context.Context, req *system.UserLoginReq) (
 		permissions []string
 		menuList    []*model.UserMenus
 	)
-	//判断验证码是否正确
+
 	debug := gmode.IsDevelop()
 	if !debug {
 		if !commonService.Captcha().VerifyString(req.VerifyKey, req.VerifyCode) {
@@ -49,7 +42,7 @@ func (c *loginController) Login(ctx context.Context, req *system.UserLoginReq) (
 	userAgent := libUtils.GetUserAgent(ctx)
 	user, err = service.SysUser().GetAdminUserByUsernamePassword(ctx, req)
 	if err != nil {
-		// 保存登录失败的日志信息
+
 		service.SysLoginLog().Invoke(gctx.New(), &model.LoginLogParams{
 			Status:    0,
 			Username:  req.Username,
@@ -64,7 +57,7 @@ func (c *loginController) Login(ctx context.Context, req *system.UserLoginReq) (
 	if err != nil {
 		return
 	}
-	// 报存登录成功的日志信息
+
 	service.SysLoginLog().Invoke(gctx.New(), &model.LoginLogParams{
 		Status:    1,
 		Username:  req.Username,
@@ -73,7 +66,7 @@ func (c *loginController) Login(ctx context.Context, req *system.UserLoginReq) (
 		Msg:       "登录成功",
 		Module:    "系统后台",
 	})
-	key := gconv.String(user.Id) + "-" + gmd5.MustEncryptString(user.UserName) + gmd5.MustEncryptString(user.UserPassword)
+	key := gconv.String(user.Id) + "-" + gmd5.MustEncryptString(user.UserName)
 	if g.Cfg().MustGet(ctx, "gfToken.multiLogin").Bool() {
 		key = gconv.String(user.Id) + "-" + gmd5.MustEncryptString(user.UserName) + gmd5.MustEncryptString(user.UserPassword+ip+userAgent)
 	}
@@ -84,7 +77,7 @@ func (c *loginController) Login(ctx context.Context, req *system.UserLoginReq) (
 		err = gerror.New("登录失败，后端服务出现错误")
 		return
 	}
-	//获取用户菜单数据
+
 	menuList, permissions, err = service.SysUser().GetAdminRules(ctx, user.Id)
 	if err != nil {
 		return
@@ -95,7 +88,7 @@ func (c *loginController) Login(ctx context.Context, req *system.UserLoginReq) (
 		MenuList:    menuList,
 		Permissions: permissions,
 	}
-	//用户在线状态保存
+
 	service.SysUserOnline().Invoke(gctx.New(), &model.SysUserOnlineParams{
 		UserAgent: userAgent,
 		Uuid:      gmd5.MustEncrypt(token),
@@ -106,7 +99,7 @@ func (c *loginController) Login(ctx context.Context, req *system.UserLoginReq) (
 	return
 }
 
-// LoginOut 退出登录
+
 func (c *loginController) LoginOut(ctx context.Context, req *system.UserLoginOutReq) (res *system.UserLoginOutRes, err error) {
 	err = service.GfToken().RemoveToken(ctx, service.GfToken().GetRequestToken(g.RequestFromCtx(ctx)))
 	return

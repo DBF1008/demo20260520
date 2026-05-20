@@ -1,10 +1,3 @@
-/*
-* @desc:字典类型
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu
-* @Date:   2022/4/14 21:30
- */
-
 package system
 
 import (
@@ -16,9 +9,9 @@ import (
 
 type DictTypeSearchReq struct {
 	g.Meta   `path:"/dict/type/list" tags:"字典管理" method:"get" summary:"字典类型列表"`
-	DictName string `p:"dictName"` //字典名称
-	DictType string `p:"dictType"` //字典类型
-	Status   string `p:"status"`   //字典状态
+	DictName string `p:"dictName"`
+	DictType string `p:"dictType"`
+	Status   string `p:"status"`
 	commonApi.PageReq
 }
 

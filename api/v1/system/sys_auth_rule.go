@@ -1,10 +1,3 @@
-/*
-* @desc:菜单api
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2022/3/18 10:27
- */
-
 package system
 
 import (
@@ -39,8 +32,8 @@ type RuleAddReq struct {
 	Remark    string `p:"remark" `
 	IsHide    uint   `p:"isHide"`
 	Path      string `p:"path"`
-	Redirect  string `p:"redirect"` // 路由重定向
-	Roles     []uint `p:"roles"`    // 角色ids
+	Redirect  string `p:"redirect"`
+	Roles     []uint `p:"roles"`
 	Component string `p:"component" v:"required-if:menuType,1#组件路径不能为空"`
 	IsLink    uint   `p:"isLink"`
 	IsIframe  uint   `p:"isIframe"`
@@ -89,8 +82,8 @@ type RuleUpdateReq struct {
 	Remark    string `p:"remark" `
 	IsHide    uint   `p:"isHide"`
 	Path      string `p:"path"`
-	Redirect  string `p:"redirect"` // 路由重定向
-	Roles     []uint `p:"roles"`    // 角色ids
+	Redirect  string `p:"redirect"`
+	Roles     []uint `p:"roles"`
 	Component string `p:"component" v:"required-if:menuType,1#组件路径不能为空"`
 	IsLink    uint   `p:"isLink"`
 	IsIframe  uint   `p:"isIframe"`

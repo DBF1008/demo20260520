@@ -29,10 +29,10 @@ type sysMonitorController struct {
 }
 
 func (c *sysMonitorController) List(ctx context.Context, req *system.MonitorSearchReq) (res *system.MonitorSearchRes, err error) {
-	cpuNum := runtime.NumCPU() //核心数
-	var cpuUsed float64 = 0    //用户使用率
-	var cpuAvg5 float64 = 0    //CPU负载5
-	var cpuAvg15 float64 = 0   //当前空闲率
+	cpuNum := runtime.NumCPU()
+	var cpuUsed float64 = 0
+	var cpuAvg5 float64 = 0
+	var cpuAvg15 float64 = 0
 
 	cpuInfo, err := cpu.Percent(time.Duration(time.Second), false)
 	if err == nil {
@@ -45,10 +45,10 @@ func (c *sysMonitorController) List(ctx context.Context, req *system.MonitorSear
 		cpuAvg15, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", loadInfo.Load5), 64)
 	}
 
-	var memTotal uint64 = 0  //总内存
-	var memUsed uint64 = 0   //总内存  := 0 //已用内存
-	var memFree uint64 = 0   //剩余内存
-	var memUsage float64 = 0 //使用率
+	var memTotal uint64 = 0
+	var memUsed uint64 = 0
+	var memFree uint64 = 0
+	var memUsage float64 = 0
 
 	v, err := mem.VirtualMemory()
 	if err == nil {
@@ -58,10 +58,10 @@ func (c *sysMonitorController) List(ctx context.Context, req *system.MonitorSear
 		memUsage, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", v.UsedPercent), 64)
 	}
 
-	var goTotal uint64 = 0  //go分配的总内存数
-	var goUsed uint64 = 0   //go使用的内存数
-	var goFree uint64 = 0   //go剩余的内存数
-	var goUsage float64 = 0 //使用率
+	var goTotal uint64 = 0
+	var goUsed uint64 = 0
+	var goFree uint64 = 0
+	var goUsage float64 = 0
 
 	p, err := process.NewProcess(int32(os.Getpid()))
 	if err == nil {
@@ -72,15 +72,15 @@ func (c *sysMonitorController) List(ctx context.Context, req *system.MonitorSear
 		}
 	}
 
-	sysComputerIp := "" //服务器IP
+	sysComputerIp := ""
 	ip, err := libUtils.GetLocalIP()
 	if err == nil {
 		sysComputerIp = ip
 	}
 
-	sysComputerName := "" //服务器名称
-	sysOsName := ""       //操作系统
-	sysOsArch := ""       //系统架构
+	sysComputerName := ""
+	sysOsName := ""
+	sysOsArch := ""
 
 	sysInfo, err := host.Info()
 
@@ -90,14 +90,14 @@ func (c *sysMonitorController) List(ctx context.Context, req *system.MonitorSear
 		sysOsArch = sysInfo.KernelArch
 	}
 
-	goName := "GoLang"             //语言环境
-	goVersion := runtime.Version() //版本
+	goName := "GoLang"
+	goVersion := runtime.Version()
 	gtime.Date()
-	goStartTime := c.startTime //启动时间
+	goStartTime := c.startTime
 
-	goRunTime := gtime.Now().Timestamp() - c.startTime.Timestamp() //运行时长（秒）
-	goHome := runtime.GOROOT()                                     //安装路径
-	goUserDir := ""                                                //项目路径
+	goRunTime := gtime.Now().Timestamp() - c.startTime.Timestamp()
+	goHome := runtime.GOROOT()
+	goUserDir := ""
 
 	curDir, err := os.Getwd()
 
@@ -105,9 +105,9 @@ func (c *sysMonitorController) List(ctx context.Context, req *system.MonitorSear
 		goUserDir = curDir
 	}
 
-	//服务器磁盘信息
+
 	diskList := make([]disk.UsageStat, 0)
-	diskInfo, err := disk.Partitions(true) //所有分区
+	diskInfo, err := disk.Partitions(true)
 	if err == nil {
 		for _, p := range diskInfo {
 			diskDetail, err := disk.Usage(p.Mountpoint)

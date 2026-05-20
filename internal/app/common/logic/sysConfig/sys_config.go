@@ -1,10 +1,3 @@
-/*
-* @desc:配置参数管理
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2022/9/28 9:13
- */
-
 package sysConfig
 
 import (
@@ -34,7 +27,7 @@ func New() *sSysConfig {
 type sSysConfig struct {
 }
 
-// List 系统参数列表
+
 func (s *sSysConfig) List(ctx context.Context, req *system.ConfigSearchReq) (res *system.ConfigSearchRes, err error) {
 	res = new(system.ConfigSearchRes)
 	err = g.Try(ctx, func(ctx context.Context) {
@@ -81,13 +74,13 @@ func (s *sSysConfig) Add(ctx context.Context, req *system.ConfigAddReq, userId u
 			Remark:      req.Remark,
 		})
 		liberr.ErrIsNil(ctx, err, "添加系统参数失败")
-		//清除缓存
+
 		service.Cache().RemoveByTag(ctx, consts.CacheSysConfigTag)
 	})
 	return
 }
 
-// CheckConfigKeyUnique 验证参数键名是否存在
+
 func (s *sSysConfig) CheckConfigKeyUnique(ctx context.Context, configKey string, configId ...int64) (err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		data := (*entity.SysConfig)(nil)
@@ -104,7 +97,7 @@ func (s *sSysConfig) CheckConfigKeyUnique(ctx context.Context, configKey string,
 	return
 }
 
-// Get 获取系统参数
+
 func (s *sSysConfig) Get(ctx context.Context, id int) (res *system.ConfigGetRes, err error) {
 	res = new(system.ConfigGetRes)
 	err = g.Try(ctx, func(ctx context.Context) {
@@ -114,7 +107,7 @@ func (s *sSysConfig) Get(ctx context.Context, id int) (res *system.ConfigGetRes,
 	return
 }
 
-// Edit 修改系统参数
+
 func (s *sSysConfig) Edit(ctx context.Context, req *system.ConfigEditReq, userId uint64) (err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		err = s.CheckConfigKeyUnique(ctx, req.ConfigKey, req.ConfigId)
@@ -128,24 +121,24 @@ func (s *sSysConfig) Edit(ctx context.Context, req *system.ConfigEditReq, userId
 			Remark:      req.Remark,
 		})
 		liberr.ErrIsNil(ctx, err, "修改系统参数失败")
-		//清除缓存
+
 		service.Cache().RemoveByTag(ctx, consts.CacheSysConfigTag)
 	})
 	return
 }
 
-// Delete 删除系统参数
+
 func (s *sSysConfig) Delete(ctx context.Context, ids []int) (err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		_, err = dao.SysConfig.Ctx(ctx).Delete(dao.SysConfig.Columns().ConfigId+" in (?)", ids)
 		liberr.ErrIsNil(ctx, err, "删除失败")
-		//清除缓存
+
 		service.Cache().RemoveByTag(ctx, consts.CacheSysConfigTag)
 	})
 	return
 }
 
-// GetConfigByKey 通过key获取参数（从缓存获取）
+
 func (s *sSysConfig) GetConfigByKey(ctx context.Context, key string) (config *entity.SysConfig, err error) {
 	if key == "" {
 		err = gerror.New("参数key不能为空")
@@ -167,7 +160,7 @@ func (s *sSysConfig) GetConfigByKey(ctx context.Context, key string) (config *en
 	return
 }
 
-// GetByKey 通过key获取参数（从数据库获取）
+
 func (s *sSysConfig) GetByKey(ctx context.Context, key string) (config *entity.SysConfig, err error) {
 	err = dao.SysConfig.Ctx(ctx).Where("config_key", key).Scan(&config)
 	if err != nil {

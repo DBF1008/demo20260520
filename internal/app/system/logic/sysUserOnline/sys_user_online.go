@@ -1,10 +1,3 @@
-/*
-* @desc:用户在线状态处理
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2023/1/10 14:50
- */
-
 package sysUserOnline
 
 import (
@@ -41,12 +34,12 @@ type sSysUserOnline struct {
 
 func (s *sSysUserOnline) Invoke(ctx context.Context, params *model.SysUserOnlineParams) {
 	s.Pool.Add(ctx, func(ctx context.Context) {
-		//写入数据
+
 		s.SaveOnline(ctx, params)
 	})
 }
 
-// SaveOnline 保存用户在线状态
+
 func (s *sSysUserOnline) SaveOnline(ctx context.Context, params *model.SysUserOnlineParams) {
 	err := g.Try(ctx, func(ctx context.Context) {
 		ua := user_agent.New(params.UserAgent)
@@ -65,18 +58,18 @@ func (s *sSysUserOnline) SaveOnline(ctx context.Context, params *model.SysUserOn
 			}
 		)
 
-		//查询是否已存在当前用户
+
 		err := dao.SysUserOnline.Ctx(ctx).Fields(dao.SysUserOnline.Columns().Id).
 			Where(dao.SysUserOnline.Columns().Token, data.Token).
 			Scan(&info)
 		liberr.ErrIsNil(ctx, err)
-		//若已存在则更新
+
 		if info != nil {
 			_, err = dao.SysUserOnline.Ctx(ctx).
 				Where(dao.SysUserOnline.Columns().Id, info.Id).
 				FieldsEx(dao.SysUserOnline.Columns().Id).Update(data)
 			liberr.ErrIsNil(ctx, err)
-		} else { //否则新增
+		} else {
 			_, err = dao.SysUserOnline.Ctx(ctx).
 				FieldsEx(dao.SysUserOnline.Columns().Id).Insert(data)
 			liberr.ErrIsNil(ctx, err)
@@ -87,7 +80,7 @@ func (s *sSysUserOnline) SaveOnline(ctx context.Context, params *model.SysUserOn
 	}
 }
 
-// CheckUserOnline 检查在线用户
+
 func (s *sSysUserOnline) CheckUserOnline(ctx context.Context) {
 	param := &system.SysUserOnlineSearchReq{
 		PageReq: common.PageReq{
@@ -123,7 +116,7 @@ func (s *sSysUserOnline) CheckUserOnline(ctx context.Context) {
 	}
 }
 
-// GetOnlineListPage 搜素在线用户列表
+
 func (s *sSysUserOnline) GetOnlineListPage(ctx context.Context, req *system.SysUserOnlineSearchReq, hasToken ...bool) (res *system.SysUserOnlineSearchRes, err error) {
 	if req.PageNum == 0 {
 		req.PageNum = 1

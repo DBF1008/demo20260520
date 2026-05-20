@@ -1,10 +1,3 @@
-/*
-* @desc:菜单
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu
-* @Date:   2022/3/16 10:36
- */
-
 package controller
 
 import (
@@ -43,9 +36,9 @@ func (c *menuController) Add(ctx context.Context, req *system.RuleAddReq) (res *
 	return
 }
 
-// GetAddParams 获取菜单添加及编辑相关参数
+
 func (c *menuController) GetAddParams(ctx context.Context, req *system.RuleGetParamsReq) (res *system.RuleGetParamsRes, err error) {
-	// 获取角色列表
+
 	res = new(system.RuleGetParamsRes)
 	res.Roles, err = service.SysRole().GetRoleList(ctx)
 	if err != nil {
@@ -55,7 +48,7 @@ func (c *menuController) GetAddParams(ctx context.Context, req *system.RuleGetPa
 	return
 }
 
-// Get 获取菜单信息
+
 func (c *menuController) Get(ctx context.Context, req *system.RuleInfoReq) (res *system.RuleInfoRes, err error) {
 	res = new(system.RuleInfoRes)
 	res.Rule, err = service.SysAuthRule().Get(ctx, req.Id)
@@ -66,13 +59,13 @@ func (c *menuController) Get(ctx context.Context, req *system.RuleInfoReq) (res 
 	return
 }
 
-// Update 菜单修改
+
 func (c *menuController) Update(ctx context.Context, req *system.RuleUpdateReq) (res *system.RuleUpdateRes, err error) {
 	err = service.SysAuthRule().Update(ctx, req)
 	return
 }
 
-// Delete 删除菜单
+
 func (c *menuController) Delete(ctx context.Context, req *system.RuleDeleteReq) (res *system.RuleDeleteRes, err error) {
 	err = service.SysAuthRule().DeleteMenuByIds(ctx, req.Ids)
 	return

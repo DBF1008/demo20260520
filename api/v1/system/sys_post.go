@@ -1,10 +1,3 @@
-/*
-* @desc:岗位相关参数
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu
-* @Date:   2022/4/7 23:09
- */
-
 package system
 
 import (
@@ -15,9 +8,9 @@ import (
 
 type PostSearchReq struct {
 	g.Meta   `path:"/post/list" tags:"岗位管理" method:"get" summary:"岗位列表"`
-	PostCode string `p:"postCode"` //岗位编码
-	PostName string `p:"postName"` //岗位名称
-	Status   string `p:"status"`   //状态
+	PostCode string `p:"postCode"`
+	PostName string `p:"postName"`
+	Status   string `p:"status"`
 	commonApi.PageReq
 }
 

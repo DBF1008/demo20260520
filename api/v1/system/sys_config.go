@@ -1,10 +1,3 @@
-/*
-* @desc:系统参数配置
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu
-* @Date:   2022/4/18 21:11
- */
-
 package system
 
 import (
@@ -15,9 +8,9 @@ import (
 
 type ConfigSearchReq struct {
 	g.Meta     `path:"/config/list" tags:"系统参数管理" method:"get" summary:"系统参数列表"`
-	ConfigName string `p:"configName"` //参数名称
-	ConfigKey  string `p:"configKey"`  //参数键名
-	ConfigType string `p:"configType"` //状态
+	ConfigName string `p:"configName"`
+	ConfigKey  string `p:"configKey"`
+	ConfigType string `p:"configType"`
 	commonApi.PageReq
 }
 

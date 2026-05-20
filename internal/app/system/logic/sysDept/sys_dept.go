@@ -1,10 +1,3 @@
-/*
-* @desc:部门管理
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2022/9/26 15:14
- */
-
 package sysDept
 
 import (
@@ -58,7 +51,7 @@ func (s *sSysDept) GetList(ctx context.Context, req *system.DeptSearchReq) (list
 func (s *sSysDept) GetFromCache(ctx context.Context) (list []*entity.SysDept, err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		cache := commonService.Cache()
-		//从缓存获取
+
 		iList := cache.GetOrSetFuncLock(ctx, consts.CacheSysDept, func(ctx context.Context) (value interface{}, err error) {
 			err = dao.SysDept.Ctx(ctx).Scan(&list)
 			liberr.ErrIsNil(ctx, err, "获取部门列表失败")
@@ -73,7 +66,7 @@ func (s *sSysDept) GetFromCache(ctx context.Context) (list []*entity.SysDept, er
 	return
 }
 
-// Add 添加部门
+
 func (s *sSysDept) Add(ctx context.Context, req *system.DeptAddReq) (err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		_, err = dao.SysDept.Ctx(ctx).Insert(do.SysDept{
@@ -87,13 +80,13 @@ func (s *sSysDept) Add(ctx context.Context, req *system.DeptAddReq) (err error) 
 			CreatedBy: service.Context().GetUserId(ctx),
 		})
 		liberr.ErrIsNil(ctx, err, "添加部门失败")
-		// 删除缓存
+
 		commonService.Cache().Remove(ctx, consts.CacheSysDept)
 	})
 	return
 }
 
-// Edit 部门修改
+
 func (s *sSysDept) Edit(ctx context.Context, req *system.DeptEditReq) (err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		_, err = dao.SysDept.Ctx(ctx).WherePri(req.DeptId).Update(do.SysDept{
@@ -107,7 +100,7 @@ func (s *sSysDept) Edit(ctx context.Context, req *system.DeptEditReq) (err error
 			UpdatedBy: service.Context().GetUserId(ctx),
 		})
 		liberr.ErrIsNil(ctx, err, "修改部门失败")
-		// 删除缓存
+
 		commonService.Cache().Remove(ctx, consts.CacheSysDept)
 	})
 	return
@@ -126,7 +119,7 @@ func (s *sSysDept) Delete(ctx context.Context, id uint64) (err error) {
 		ids = append(ids, id)
 		_, err = dao.SysDept.Ctx(ctx).Where(dao.SysDept.Columns().DeptId+" in (?)", ids).Delete()
 		liberr.ErrIsNil(ctx, err, "删除部门失败")
-		// 删除缓存
+
 		commonService.Cache().Remove(ctx, consts.CacheSysDept)
 	})
 	return
@@ -144,7 +137,7 @@ func (s *sSysDept) FindSonByParentId(deptList []*entity.SysDept, deptId uint64) 
 	return children
 }
 
-// GetListTree 部门树形菜单
+
 func (s *sSysDept) GetListTree(pid uint64, list []*entity.SysDept) (deptTree []*model.SysDeptTreeRes) {
 	deptTree = make([]*model.SysDeptTreeRes, 0, len(list))
 	for _, v := range list {
@@ -162,7 +155,7 @@ func (s *sSysDept) GetListTree(pid uint64, list []*entity.SysDept) (deptTree []*
 	return
 }
 
-// GetByDeptId 通过部门id获取部门信息
+
 func (s *sSysDept) GetByDeptId(ctx context.Context, deptId uint64) (dept *entity.SysDept, err error) {
 	var depts []*entity.SysDept
 	depts, err = s.GetFromCache(ctx)

@@ -23,7 +23,7 @@ var (
 			g.Log().SetFlags(glog.F_ASYNC | glog.F_TIME_DATE | glog.F_TIME_TIME | glog.F_FILE_LONG)
 			g.Log().Info(ctx, gbase64.MustDecodeString(consts.Logo), "Version:", consts.Version)
 			s := g.Server()
-			//调用注册已挂载相关组件
+
 			mounter.DoMount(ctx, s)
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				router.R.BindController(ctx, group)
@@ -40,7 +40,7 @@ func enhanceOpenAPIDoc(s *ghttp.Server) {
 	openapi.Config.CommonResponse = ghttp.DefaultHandlerResponse{}
 	openapi.Config.CommonResponseDataField = `Data`
 
-	// API description.
+
 	openapi.Info = goai.Info{
 		Title:       consts.OpenAPITitle,
 		Description: consts.OpenAPIDescription,

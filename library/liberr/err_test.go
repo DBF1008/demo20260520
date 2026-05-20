@@ -1,10 +1,3 @@
-/*
-* @desc:错误处理测试
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu
-* @Date:   2022/3/2 14:53
- */
-
 package liberr
 
 import (
@@ -19,7 +12,7 @@ import (
 func TestErrIsNil(t *testing.T) {
 	ctx := context.Background()
 
-	// Test case 1: 验证传入 nil 错误时不会 panic
+
 	t.Run("nil error", func(t *testing.T) {
 		defer func() {
 			if r := recover(); r != nil {
@@ -29,7 +22,7 @@ func TestErrIsNil(t *testing.T) {
 		ErrIsNil(ctx, nil)
 	})
 
-	// Test case 2: 验证传入非 nil 错误且无自定义消息时会 panic 并抛出原始错误
+
 	t.Run("non-nil error without message", func(t *testing.T) {
 		testErr := errors.New("test error")
 		defer func() {
@@ -42,7 +35,7 @@ func TestErrIsNil(t *testing.T) {
 		ErrIsNil(ctx, testErr)
 	})
 
-	// Test case 3:  验证传入非 nil 错误和自定义消息时会 panic 并抛出自定义消息
+
 	t.Run("non-nil error with custom message", func(t *testing.T) {
 		testErr := errors.New("test error")
 		customMsg := "custom error message"
@@ -56,7 +49,7 @@ func TestErrIsNil(t *testing.T) {
 		ErrIsNil(ctx, testErr, customMsg)
 	})
 
-	// Test case 4: 验证传入多个消息时使用第一个消息
+
 	t.Run("non-nil error with multiple messages", func(t *testing.T) {
 		testErr := errors.New("test error")
 		firstMsg := "first message"
@@ -71,7 +64,7 @@ func TestErrIsNil(t *testing.T) {
 		ErrIsNil(ctx, testErr, firstMsg, secondMsg)
 	})
 
-	// Test case 5: 验证 gf 框架的 gerror.NewCode 错误处理 - 验证码场景
+
 	t.Run("gerror with CodeValidationFailed", func(t *testing.T) {
 		testErr := gerror.NewCode(gcode.CodeValidationFailed, "验证码已过期或不存在")
 		defer func() {
@@ -84,7 +77,7 @@ func TestErrIsNil(t *testing.T) {
 		ErrIsNil(ctx, testErr)
 	})
 
-	// Test case 6: 验证 gerror.NewCode 错误与自定义消息
+
 	t.Run("gerror with custom message", func(t *testing.T) {
 		testErr := gerror.NewCode(gcode.CodeValidationFailed, "验证码已过期或不存在")
 		customMsg := "验证失败"
@@ -98,7 +91,7 @@ func TestErrIsNil(t *testing.T) {
 		ErrIsNil(ctx, testErr, customMsg)
 	})
 
-	// Test case 7: 验证不同类型的 gcode 错误
+
 	t.Run("gerror with CodeInternalError", func(t *testing.T) {
 		testErr := gerror.NewCode(gcode.CodeInternalError, "内部服务错误")
 		defer func() {
@@ -111,7 +104,7 @@ func TestErrIsNil(t *testing.T) {
 		ErrIsNil(ctx, testErr)
 	})
 
-	// Test case 8: 验证多种验证失败场景
+
 	t.Run("multiple validation scenarios", func(t *testing.T) {
 		scenarios := []struct {
 			name string

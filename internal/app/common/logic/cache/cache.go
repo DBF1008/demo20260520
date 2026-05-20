@@ -1,10 +1,3 @@
-/*
-* @desc:缓存处理
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2022/9/27 16:33
- */
-
 package cache
 
 import (
@@ -27,10 +20,10 @@ func New() *sCache {
 	prefix := g.Cfg().MustGet(ctx, "system.cache.prefix").String()
 	model := g.Cfg().MustGet(ctx, "system.cache.model").String()
 	if model == consts.CacheModelRedis {
-		// redis
+
 		cacheContainer = cache.NewRedis(prefix)
 	} else {
-		// memory
+
 		cacheContainer = cache.New(prefix)
 	}
 	return &sCache{

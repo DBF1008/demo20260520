@@ -1,10 +1,3 @@
-/*
-* @desc:后台操作日志业务处理
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2022/9/21 16:14
- */
-
 package sysOperLog
 
 import (
@@ -41,15 +34,15 @@ func New() *sOperateLog {
 	}
 }
 
-// OperationLog 操作日志写入
+
 func (s *sOperateLog) OperationLog(r *ghttp.Request) {
 	userInfo := service.Context().GetLoginUser(r.GetCtx())
 	if userInfo == nil {
 		return
 	}
-	url := r.Request.URL //请求地址
-	//获取菜单
-	//获取地址对应的菜单id
+	url := r.Request.URL
+
+
 	menuList, err := service.SysAuthRule().GetMenuList(r.GetCtx())
 	if err != nil {
 		g.Log().Error(r.GetCtx(), err)
@@ -77,12 +70,12 @@ func (s *sOperateLog) OperationLog(r *ghttp.Request) {
 
 func (s *sOperateLog) Invoke(ctx context.Context, data *model.SysOperLogAdd) {
 	s.Pool.Add(ctx, func(ctx context.Context) {
-		//写入日志数据
+
 		s.operationLogAdd(ctx, data)
 	})
 }
 
-// OperationLogAdd 添加操作日志
+
 func (s *sOperateLog) operationLogAdd(ctx context.Context, data *model.SysOperLogAdd) {
 	menuTitle := ""
 	if data.Menu != nil {

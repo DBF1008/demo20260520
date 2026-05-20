@@ -1,10 +1,3 @@
-/*
-* @desc:缓存处理
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2023/2/1 18:14
- */
-
 package controller
 
 import (

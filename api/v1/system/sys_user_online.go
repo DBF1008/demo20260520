@@ -1,10 +1,3 @@
-/*
-* @desc:在线用户
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2023/1/10 16:57
- */
-
 package system
 
 import (
@@ -13,7 +6,7 @@ import (
 	"github.com/tiger1103/gfast/v3/internal/app/system/model/entity"
 )
 
-// SysUserOnlineSearchReq 列表搜索参数
+
 type SysUserOnlineSearchReq struct {
 	g.Meta   `path:"/online/list" tags:"在线用户管理" method:"get" summary:"列表"`
 	Username string `p:"userName"`
@@ -22,7 +15,7 @@ type SysUserOnlineSearchReq struct {
 	commonApi.Author
 }
 
-// SysUserOnlineSearchRes 列表结果
+
 type SysUserOnlineSearchRes struct {
 	g.Meta `mime:"application/json"`
 	commonApi.ListRes

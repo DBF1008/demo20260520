@@ -1,10 +1,3 @@
-/*
-* @desc:菜单处理
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2022/9/23 16:14
- */
-
 package sysAuthRule
 
 import (
@@ -52,7 +45,7 @@ func (s *sSysAuthRule) GetMenuListSearch(ctx context.Context, req *system.RuleSe
 	return
 }
 
-// GetIsMenuList 获取isMenu=0|1
+
 func (s *sSysAuthRule) GetIsMenuList(ctx context.Context) ([]*model.SysAuthRuleInfoRes, error) {
 	list, err := s.GetMenuList(ctx)
 	if err != nil {
@@ -67,10 +60,10 @@ func (s *sSysAuthRule) GetIsMenuList(ctx context.Context) ([]*model.SysAuthRuleI
 	return gList, nil
 }
 
-// GetMenuList 获取所有菜单
+
 func (s *sSysAuthRule) GetMenuList(ctx context.Context) (list []*model.SysAuthRuleInfoRes, err error) {
 	cache := commonService.Cache()
-	//从缓存获取
+
 	iList := cache.GetOrSetFuncLock(ctx, consts.CacheSysAuthMenu, s.getMenuListFromDb, 0, consts.CacheSysAuthTag)
 	if !iList.IsEmpty() {
 		err = gconv.Struct(iList, &list)
@@ -79,11 +72,11 @@ func (s *sSysAuthRule) GetMenuList(ctx context.Context) (list []*model.SysAuthRu
 	return
 }
 
-// 从数据库获取所有菜单
+
 func (s *sSysAuthRule) getMenuListFromDb(ctx context.Context) (value interface{}, err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		var v []*model.SysAuthRuleInfoRes
-		//从数据库获取
+
 		err = dao.SysAuthRule.Ctx(ctx).
 			Fields(model.SysAuthRuleInfoRes{}).Order("weigh desc,id asc").Scan(&v)
 		liberr.ErrIsNil(ctx, err, "获取菜单数据失败")
@@ -92,7 +85,7 @@ func (s *sSysAuthRule) getMenuListFromDb(ctx context.Context) (value interface{}
 	return
 }
 
-// GetIsButtonList 获取所有按钮isMenu=2 菜单列表
+
 func (s *sSysAuthRule) GetIsButtonList(ctx context.Context) ([]*model.SysAuthRuleInfoRes, error) {
 	list, err := s.GetMenuList(ctx)
 	if err != nil {
@@ -107,7 +100,7 @@ func (s *sSysAuthRule) GetIsButtonList(ctx context.Context) ([]*model.SysAuthRul
 	return gList, nil
 }
 
-// Add 添加菜单
+
 func (s *sSysAuthRule) Add(ctx context.Context, req *system.RuleAddReq) (err error) {
 	if s.menuNameExists(ctx, req.Name, 0) {
 		err = gerror.New("接口规则已经存在")
@@ -115,7 +108,7 @@ func (s *sSysAuthRule) Add(ctx context.Context, req *system.RuleAddReq) (err err
 	}
 	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
 		err = g.Try(ctx, func(ctx context.Context) {
-			//菜单数据
+
 			data := do.SysAuthRule{
 				Pid:       req.Pid,
 				Name:      req.Name,
@@ -143,13 +136,13 @@ func (s *sSysAuthRule) Add(ctx context.Context, req *system.RuleAddReq) (err err
 		return err
 	})
 	if err == nil {
-		// 删除相关缓存
+
 		commonService.Cache().Remove(ctx, consts.CacheSysAuthMenu)
 	}
 	return
 }
 
-// 检查菜单规则是否存在
+
 func (s *sSysAuthRule) menuNameExists(ctx context.Context, name string, id uint) bool {
 	m := dao.SysAuthRule.Ctx(ctx).Where("name=?", name)
 	if id != 0 {
@@ -163,7 +156,7 @@ func (s *sSysAuthRule) menuNameExists(ctx context.Context, name string, id uint)
 	return !c.IsEmpty()
 }
 
-// BindRoleRule 绑定角色权限
+
 func (s *sSysAuthRule) BindRoleRule(ctx context.Context, ruleId interface{}, roleIds []uint) (err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		enforcer, e := commonService.CasbinEnforcer()
@@ -203,7 +196,7 @@ func (s *sSysAuthRule) Update(ctx context.Context, req *system.RuleUpdateReq) (e
 	}
 	err = g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
 		err = g.Try(ctx, func(ctx context.Context) {
-			//菜单数据
+
 			data := do.SysAuthRule{
 				Pid:       req.Pid,
 				Name:      req.Name,
@@ -231,7 +224,7 @@ func (s *sSysAuthRule) Update(ctx context.Context, req *system.RuleUpdateReq) (e
 		return err
 	})
 	if err == nil {
-		// 删除相关缓存
+
 		commonService.Cache().Remove(ctx, consts.CacheSysAuthMenu)
 	}
 	return
@@ -241,10 +234,10 @@ func (s *sSysAuthRule) UpdateRoleRule(ctx context.Context, ruleId uint, roleIds 
 	err = g.Try(ctx, func(ctx context.Context) {
 		enforcer, e := commonService.CasbinEnforcer()
 		liberr.ErrIsNil(ctx, e)
-		//删除旧权限
+
 		_, e = enforcer.RemoveFilteredPolicy(1, gconv.String(ruleId))
 		liberr.ErrIsNil(ctx, e)
-		// 添加新权限
+
 		roleIdsStrArr := gconv.Strings(roleIds)
 		for _, v := range roleIdsStrArr {
 			_, e = enforcer.AddPolicy(v, gconv.String(ruleId), "All")
@@ -271,7 +264,7 @@ func (s *sSysAuthRule) GetMenuListTree(pid uint, list []*model.SysAuthRuleInfoRe
 	return tree
 }
 
-// DeleteMenuByIds 删除菜单
+
 func (s *sSysAuthRule) DeleteMenuByIds(ctx context.Context, ids []int) (err error) {
 	var list []*model.SysAuthRuleInfoRes
 	list, err = s.GetMenuList(ctx)
@@ -290,14 +283,14 @@ func (s *sSysAuthRule) DeleteMenuByIds(ctx context.Context, ids []int) (err erro
 		return g.Try(ctx, func(ctx context.Context) {
 			_, err = dao.SysAuthRule.Ctx(ctx).Where("id in (?)", ids).Delete()
 			liberr.ErrIsNil(ctx, err, "删除失败")
-			//删除权限
+
 			enforcer, err := commonService.CasbinEnforcer()
 			liberr.ErrIsNil(ctx, err)
 			for _, v := range ids {
 				_, err = enforcer.RemoveFilteredPolicy(1, gconv.String(v))
 				liberr.ErrIsNil(ctx, err)
 			}
-			// 删除相关缓存
+
 			commonService.Cache().Remove(ctx, consts.CacheSysAuthMenu)
 		})
 	})

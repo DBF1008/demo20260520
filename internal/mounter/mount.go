@@ -1,10 +1,3 @@
-/*
-* @desc:组件挂载器
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2024/10/25 08:36
- */
-
 package mounter
 
 import (

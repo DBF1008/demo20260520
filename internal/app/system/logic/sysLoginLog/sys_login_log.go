@@ -1,10 +1,3 @@
-/*
-* @desc:登录日志
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2022/9/26 15:20
- */
-
 package sysLoginLog
 
 import (
@@ -38,7 +31,7 @@ func (s *sSysLoginLog) Invoke(ctx context.Context, data *model.LoginLogParams) {
 	s.Pool.Add(
 		ctx,
 		func(ctx context.Context) {
-			//写入日志数据
+
 			service.SysUser().LoginLog(ctx, data)
 		},
 	)

@@ -1,10 +1,3 @@
-/*
-* @desc:岗位管理
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2022/9/26 15:28
- */
-
 package sysPost
 
 import (
@@ -31,7 +24,7 @@ func New() *sSysPost {
 type sSysPost struct {
 }
 
-// List 岗位列表
+
 func (s *sSysPost) List(ctx context.Context, req *system.PostSearchReq) (res *system.PostSearchRes, err error) {
 	res = new(system.PostSearchRes)
 	err = g.Try(ctx, func(ctx context.Context) {
@@ -100,7 +93,7 @@ func (s *sSysPost) Delete(ctx context.Context, ids []int) (err error) {
 	return
 }
 
-// GetUsedPost 获取正常状态的岗位
+
 func (s *sSysPost) GetUsedPost(ctx context.Context) (list []*entity.SysPost, err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		err = dao.SysPost.Ctx(ctx).Where(dao.SysPost.Columns().Status, 1).

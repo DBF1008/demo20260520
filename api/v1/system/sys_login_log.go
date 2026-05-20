@@ -1,10 +1,3 @@
-/*
-* @desc:登录日志
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu
-* @Date:   2022/4/24 22:09
- */
-
 package system
 
 import (
@@ -13,15 +6,15 @@ import (
 	"github.com/tiger1103/gfast/v3/internal/app/system/model/entity"
 )
 
-// LoginLogSearchReq 查询列表请求参数
+
 type LoginLogSearchReq struct {
 	g.Meta        `path:"/loginLog/list" tags:"登录日志管理" method:"get" summary:"日志列表"`
-	LoginName     string `p:"userName"`      //登陆名
-	Status        string `p:"status"`        //状态
-	Ipaddr        string `p:"ipaddr"`        //登录地址
-	SortName      string `p:"orderByColumn"` //排序字段
-	SortOrder     string `p:"isAsc"`         //排序方式
-	LoginLocation string `p:"loginLocation"` //登录地点
+	LoginName     string `p:"userName"`
+	Status        string `p:"status"`
+	Ipaddr        string `p:"ipaddr"`
+	SortName      string `p:"orderByColumn"`
+	SortOrder     string `p:"isAsc"`
+	LoginLocation string `p:"loginLocation"`
 	commonApi.PageReq
 }
 

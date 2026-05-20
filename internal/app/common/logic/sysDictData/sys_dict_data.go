@@ -1,10 +1,3 @@
-/*
-* @desc:字典数据管理
-* @company:云南奇讯科技有限公司
-* @Author: yixiaohu<yxh669@qq.com>
-* @Date:   2022/9/28 9:22
- */
-
 package sysDictData
 
 import (
@@ -36,17 +29,17 @@ func New() *sSysDictData {
 type sSysDictData struct {
 }
 
-// GetDictWithDataByType 通过字典键类型获取选项
+
 func (s *sSysDictData) GetDictWithDataByType(ctx context.Context, dictType, defaultValue string) (dict *system.GetDictRes,
 	err error) {
 	cache := service.Cache()
 	cacheKey := consts.CacheSysDict + "_" + dictType
-	//从缓存获取
+
 	iDict := cache.GetOrSetFuncLock(ctx, cacheKey, func(ctx context.Context) (value interface{}, err error) {
 		err = g.Try(ctx, func(ctx context.Context) {
-			//从数据库获取
+
 			dict = &system.GetDictRes{}
-			//获取类型数据
+
 			err = dao.SysDictType.Ctx(ctx).Where(dao.SysDictType.Columns().DictType, dictType).
 				Where(dao.SysDictType.Columns().Status, 1).Fields(model.DictTypeRes{}).Scan(&dict.Info)
 			liberr.ErrIsNil(ctx, err, "获取字典类型失败")
@@ -70,7 +63,7 @@ func (s *sSysDictData) GetDictWithDataByType(ctx context.Context, dictType, defa
 			return
 		}
 	}
-	//设置给定的默认值
+
 	for _, v := range dict.Values {
 		if defaultValue != "" {
 			if gstr.Equal(defaultValue, v.DictValue) {
@@ -83,7 +76,7 @@ func (s *sSysDictData) GetDictWithDataByType(ctx context.Context, dictType, defa
 	return
 }
 
-// List 获取字典数据
+
 func (s *sSysDictData) List(ctx context.Context, req *system.DictDataSearchReq) (res *system.DictDataSearchRes, err error) {
 	res = new(system.DictDataSearchRes)
 	err = g.Try(ctx, func(ctx context.Context) {
@@ -115,7 +108,7 @@ func (s *sSysDictData) List(ctx context.Context, req *system.DictDataSearchReq) 
 	return
 }
 
-// IsExists 判断同一类型下字典名次和字典键值是否存在
+
 func (s *sSysDictData) IsExists(ctx context.Context, dictType, dictLabel, dictValue string, dictCode ...int64) error {
 	return g.Try(ctx, func(ctx context.Context) {
 		var dictData []*entity.SysDictData
@@ -165,13 +158,13 @@ func (s *sSysDictData) Add(ctx context.Context, req *system.DictDataAddReq, user
 			Remark:    req.Remark,
 		})
 		liberr.ErrIsNil(ctx, err, "添加字典数据失败")
-		//清除缓存
+
 		service.Cache().RemoveByTag(ctx, consts.CacheSysDictTag)
 	})
 	return
 }
 
-// Get 获取字典数据
+
 func (s *sSysDictData) Get(ctx context.Context, dictCode uint) (res *system.DictDataGetRes, err error) {
 	res = new(system.DictDataGetRes)
 	err = g.Try(ctx, func(ctx context.Context) {
@@ -181,7 +174,7 @@ func (s *sSysDictData) Get(ctx context.Context, dictCode uint) (res *system.Dict
 	return
 }
 
-// Edit 修改字典数据
+
 func (s *sSysDictData) Edit(ctx context.Context, req *system.DictDataEditReq, userId uint64) (err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		err = s.IsExists(ctx, req.DictType, req.DictLabel, req.DictValue, req.DictCode)
@@ -199,18 +192,18 @@ func (s *sSysDictData) Edit(ctx context.Context, req *system.DictDataEditReq, us
 			Remark:    req.Remark,
 		})
 		liberr.ErrIsNil(ctx, err, "修改字典数据失败")
-		//清除缓存
+
 		service.Cache().RemoveByTag(ctx, consts.CacheSysDictTag)
 	})
 	return
 }
 
-// Delete 删除字典数据
+
 func (s *sSysDictData) Delete(ctx context.Context, ids []int) (err error) {
 	err = g.Try(ctx, func(ctx context.Context) {
 		_, err = dao.SysDictData.Ctx(ctx).Where(dao.SysDictData.Columns().DictCode+" in(?)", ids).Delete()
 		liberr.ErrIsNil(ctx, err, "删除字典数据失败")
-		//清除缓存
+
 		service.Cache().RemoveByTag(ctx, consts.CacheSysDictTag)
 	})
 	return
